@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import CleverTap from 'clevertap-react-native';
 
-//emulator -avd Medium_Phone_API_36 -read-only 
+//emulator -avd Medium_Phone_API_36 -read-only // npx react-native run-android
 
 const App = () => {
   const [identity, setIdentity] = useState('');
