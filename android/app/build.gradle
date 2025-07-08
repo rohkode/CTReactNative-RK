@@ -9,6 +9,11 @@ react {
     autolinkLibrariesWithApp()
 }
 
+project.ext.react = [
+  enableHermes: true,
+  newArchEnabled: true
+]
+
 android {
     namespace "com.ctreactnative"
 
