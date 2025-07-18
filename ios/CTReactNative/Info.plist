@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
@@ -19,19 +21,17 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CLEVERTAP_REGION</key>
-	<string>eu1</string>
+	<string>sk1</string>
 	<key>CleverTapAccountID</key>
-	<string>886-85W-7Z7Z</string>
+	<string>W84-RZR-RZ7Z</string>
 	<key>CleverTapToken</key>
-	<string>05b-6bb</string>
-	<!-- Push notification configuration -->
+	<string>212-4b0</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
-	<!-- Deep Linking -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -43,12 +43,10 @@
 			</array>
 		</dict>
 	</array>
-	<!-- Privacy-related descriptions -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is required for notifications and geofencing.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Your location is required for notifications and geofencing.</string>
-
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -56,14 +54,12 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

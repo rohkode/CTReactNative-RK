@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -6,14 +7,17 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  Linking,
+  Image,
   Alert,
 } from 'react-native';
 import CleverTap from 'clevertap-react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import InboxScreen from './InboxScreen'; // make sure this path is correct
 
-//emulator -avd Medium_Phone_API_36 -read-only // npx react-native run-android
+const Stack = createNativeStackNavigator();
 
-const App = () => {
+const HomeScreen = ({ navigation }: any) => {
   const [identity, setIdentity] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -21,47 +25,23 @@ const App = () => {
   const [gender, setGender] = useState('');
 
   useEffect(() => {
-    // Listener for CleverTap push notification click
-    const onPushNotificationClick = (event: any) => {
-      console.log('Push Notification Clicked:', event);
+    CleverTap.initializeInbox();
+
+    CleverTap.addListener('CleverTapInboxDidInitialize', () => {
+      console.log('CleverTap Inbox Initialized');
+    });
+
+    CleverTap.addListener('CleverTapPushNotificationClicked', (event: any) => {
       const deepLinkURL = event.wzrk_dl;
       if (deepLinkURL) {
-        // Handle the deep link (e.g., navigate or show alert)
         Alert.alert('CleverTap Deep Link Triggered', deepLinkURL);
       }
-    };
-
-    CleverTap.addListener('CleverTapPushNotificationClicked', onPushNotificationClick);
+    });
 
     return () => {
       CleverTap.removeListener('CleverTapPushNotificationClicked');
     };
   }, []);
-
-
-  // useEffect(() => {
-  //   // Handle the initial URL if the app was cold-launched via a deep link
-  //   Linking.getInitialURL().then((url) => {
-  //     if (url) {
-  //       handleDeepLink(url);
-  //     }
-  //   });
-
-  //   // Listen for deep links while the app is running or in background
-  //   const subscription = Linking.addEventListener('url', (event) => {
-  //     handleDeepLink(event.url);
-  //   });
-
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, []);
-
-  // const handleDeepLink = (url: string) => {
-  //   console.log('Deep link opened:', url);
-  //   Alert.alert('Deep Link Triggered', `URL: ${url}`);
-  //   // You can add route-based logic here if needed
-  // };
 
   const handleUserLogin = () => {
     CleverTap.onUserLogin({
@@ -72,6 +52,32 @@ const App = () => {
       Gender: gender,
     });
     console.log('User logged in:', { identity, name, email, phone, gender });
+  };
+
+  const fetchInboxMessages = async () => {
+    try {
+      const headers = {
+        'X-CleverTap-Account-Id': 'W84-RZR-RZ7Z',
+        'X-CleverTap-Passcode': 'IYA-IOC-MHEL',
+        'Content-Type': 'application/json',
+      };
+
+      const body = {
+        d: [{ userId: identity }],
+      };
+
+      const response = await axios.post(
+        'https://sk1.api.clevertap.com/1/inbox/getMessages',
+        body,
+        { headers }
+      );
+
+      console.log('Fetched Inbox Messages:', response.data);
+      Alert.alert('Inbox Fetched', JSON.stringify(response.data, null, 2));
+    } catch (error) {
+      console.error('Error fetching inbox:', error);
+      Alert.alert('Error', 'Failed to fetch inbox messages');
+    }
   };
 
   const handleRandomEvent = () => {
@@ -87,6 +93,14 @@ const App = () => {
       status: 'completed',
     });
     console.log('Event with properties');
+  };
+
+  const goToInboxScreen = () => {
+    if (!identity.trim()) {
+      Alert.alert('Missing Identity', 'Please enter identity before opening inbox');
+      return;
+    }
+    navigation.navigate('Inbox', { userIdentity: identity });
   };
 
   return (
@@ -130,6 +144,14 @@ const App = () => {
         onChangeText={setGender}
       />
 
+      <TouchableOpacity style={styles.inboxIconContainer} onPress={goToInboxScreen}>
+        <Image
+          source={require('./assets/bell_inbox.png')}
+          style={styles.inboxIcon}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={handleUserLogin}>
         <Text style={styles.buttonText}>User Login</Text>
       </TouchableOpacity>
@@ -141,9 +163,26 @@ const App = () => {
       <TouchableOpacity style={styles.button} onPress={handleEventWithProperties}>
         <Text style={styles.buttonText}>Trigger Event With Properties</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={fetchInboxMessages}>
+        <Text style={styles.buttonText}>Fetch Inbox Messages</Text>
+      </TouchableOpacity>
     </View>
   );
 };
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Inbox" component={InboxScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -168,6 +207,16 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 14,
   },
+  inboxIconContainer: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    zIndex: 10,
+  },
+  inboxIcon: {
+    width: 40,
+    height: 40,
+  },
   button: {
     backgroundColor: '#BB86FC',
     paddingVertical: 10,
@@ -181,5 +230,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-export default App;

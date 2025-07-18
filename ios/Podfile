@@ -13,8 +13,8 @@ if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
 end
 
-# ✅ Enable the New Architecture
-ENV['RCT_NEW_ARCH_ENABLED'] = '1'
+# ❌ Disable the New Architecture
+ENV['RCT_NEW_ARCH_ENABLED'] = '0'
 
 target 'CTReactNative' do
   config = use_native_modules!
@@ -22,11 +22,11 @@ target 'CTReactNative' do
   # ✅ Use static linkage for CocoaPods
   use_frameworks! :linkage => :static
 
-  # ✅ Enable Fabric and Hermes for New Architecture
+  # ✅ Disable Fabric and Hermes (safe setup)
   use_react_native!(
     :path => config[:reactNativePath],
-    :fabric_enabled => true,
-    :hermes_enabled => true,
+    :fabric_enabled => false,
+    :hermes_enabled => false, # Set true only if using Hermes
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
