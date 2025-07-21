@@ -13,7 +13,7 @@ import {
 import CleverTap from 'clevertap-react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import InboxScreen from './InboxScreen'; // make sure this path is correct
+import InboxScreen from './InboxScreen';
 
 const Stack = createNativeStackNavigator();
 

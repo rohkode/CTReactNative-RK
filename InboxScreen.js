@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import CleverTap from 'clevertap-react-native';
 
 const CT_ACCOUNT_ID = 'W84-RZR-RZ7Z';
 const CT_PASSCODE = 'IYA-IOC-MHEL';
@@ -10,20 +11,24 @@ const InboxScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    CleverTap.onUserLogin({ Identity: userIdentity });
+    fetchInboxMessages();
+  }, []);
+
   const fetchInboxMessages = async () => {
     try {
-      const url = 'https://sk1.api.clevertap.com/1/inbox/getMessages';
-      const payload = {
-        userId: userIdentity || '__tanviShettyay',
-      };
-      const headers = {
-        'X-CleverTap-Account-Id': CT_ACCOUNT_ID,
-        'X-CleverTap-Passcode': CT_PASSCODE,
-        'Content-Type': 'application/json',
-      };
-
-      const response = await axios.post(url, payload, { headers });
-      console.log('Inbox API response:', response.data);
+      const response = await axios.post(
+        'https://sk1.api.clevertap.com/1/inbox/getMessages',
+        { userId: userIdentity },
+        {
+          headers: {
+            'X-CleverTap-Account-Id': CT_ACCOUNT_ID,
+            'X-CleverTap-Passcode': CT_PASSCODE,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       setMessages(response.data?.messages || []);
     } catch (error) {
       console.error('Error fetching inbox messages:', error);
@@ -32,23 +37,28 @@ const InboxScreen = ({ route }) => {
     }
   };
 
-  useEffect(() => {
-    fetchInboxMessages();
-  }, []);
+  const handleMessagePress = (messageId) => {
+    if (!messageId) return;
+    try {
+      CleverTap.markReadInboxMessageForId(messageId);
+      CleverTap.pushInboxNotificationViewedEventForId(messageId);
+      CleverTap.pushInboxNotificationClickedEventForId(messageId);
+    } catch (err) {
+      console.error('Error tracking inbox events:', err);
+    }
+  };
 
   const renderItem = ({ item }) => {
-  const content = item.msg?.content?.[0];
-  return (
-    <View style={styles.card}>
-      <Text style={styles.title}>{content?.title?.text}</Text>
-      <Text style={styles.body}>{content?.message?.text}</Text>
-    </View>
-  );
-};
+    const content = item.msg?.content?.[0];
+    return (
+      <TouchableOpacity style={styles.card} onPress={() => handleMessagePress(item._id)}>
+        <Text style={styles.title}>{content?.title?.text}</Text>
+        <Text style={styles.body}>{content?.message?.text}</Text>
+      </TouchableOpacity>
+    );
+  };
 
-  if (loading) {
-    return <ActivityIndicator style={{ flex: 1 }} size="large" />;
-  }
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} size="large" />;
 
   if (!messages.length) {
     return (
