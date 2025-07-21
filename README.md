@@ -17,17 +17,17 @@ This repository answers that question with a **YES** ✅ — using CleverTap's A
 ## 🚀 What This Project Implements
 
 * CleverTap SDK integration
+  * `User login`
+  * `Event trackingt`
 * App Inbox message retrieval using:
-
-  * `getAllInboxMessages`
-  * `getInboxMessageUnreadCount`
-  * `getInboxMessageCount`
+  * `(https://sk1.api.clevertap.com/1/inbox/getMessages API via Axios)`
 * Storing messages client-side using state
+* Custom rendering using FlatList
 * Handling:
-
-  * Message view
-  * Message click
-* Testing of re-delivery of inbox messages across uninstall/reinstall by logging in with the same identity.
+  * `Inbox message viewed`
+  * `Inbox message clicked`
+  * `Inbox message as read`
+* Support of re-delivery of app-inbox messages across uninstall/reinstall by logging in with the same identity.
 
 ---
 
@@ -38,7 +38,7 @@ CleverTap stores App Inbox messages **on their servers**, tied to a user’s uni
 When the user logs in with the same `identity` again after reinstalling the app:
 
 * The SDK automatically re-associates the device with that identity.
-* Inbox messages for that user are retrieved from CleverTap's backend when `initializeInbox()` is called.
+* The app makes a REST API call to CleverTap to fetch inbox messages for that identity.
 * No backend or server-to-server API integration is needed — this logic is purely SDK-driven.
 
 ---
@@ -86,8 +86,8 @@ Login with the same `identity` in the app (hardcoded or UI-based). Then navigate
 
 You’ll see:
 
-* Messages retrieved via `getAllInboxMessages`
-* Total and unread counts displayed
+* Messages retrieved from the API
+* Custom UI rendering messages
 * Message title and content rendered in a FlatList
 * Logs on view/click handlers
 
@@ -108,40 +108,32 @@ You’ll see:
 
 ```tsx
 useEffect(() => {
-  CleverTapReact.initializeInbox();
+  CleverTap.initializeInbox();
 }, []);
 ```
 
 ### Fetch Messages
 
 ```tsx
-const fetchInboxMessages = async () => {
-  try {
-    const messages = await CleverTapReact.getAllInboxMessages((messages) => {
-      console.log("Inbox Messages:", messages);
-      setInboxMessages(messages);
-    });
-  } catch (err) {
-    console.error("Inbox fetch error", err);
+const response = await axios.post(
+  'https://sk1.api.clevertap.com/1/inbox/getMessages',
+  { userId: userIdentity },
+  {
+    headers: {
+      'X-CleverTap-Account-Id': CT_ACCOUNT_ID,
+      'X-CleverTap-Passcode': CT_PASSCODE,
+      'Content-Type': 'application/json',
+    },
   }
-};
+);
 ```
 
-### Get Message Counts
+### Handle Message Click / View
 
 ```tsx
-const getCounts = async () => {
-  const totalCount = await CleverTapReact.getInboxMessageCount();
-  const unreadCount = await CleverTapReact.getInboxMessageUnreadCount();
-  console.log("Total:", totalCount, "Unread:", unreadCount);
-};
-```
-
-### Mark Message as Viewed or Clicked
-
-```tsx
-CleverTapReact.recordInboxNotificationViewedEvent(message);
-CleverTapReact.recordInboxNotificationClickedEvent(message);
+CleverTap.markReadInboxMessageForId(messageId);
+CleverTap.pushInboxNotificationViewedEventForId(messageId);
+CleverTap.pushInboxNotificationClickedEventForId(messageId);
 ```
 
 ---
@@ -149,5 +141,6 @@ CleverTapReact.recordInboxNotificationClickedEvent(message);
 ## ❗ Notes
 
 * App Inbox *won’t* show messages for anonymous users (i.e., before login).
-* You must call `initializeInbox()` *after* the user logs in and identity is set.
-* No server-side API setup is required — all logic lives inside the React Native app.
+* Make sure you call onUserLogin and use a valid identity before accessing the inbox.
+* This project does not use SDK methods like getAllInboxMessages, getInboxMessageCount, or getInboxMessageUnreadCount.
+* All inbox retrieval is done via API — giving you complete UI control.
