@@ -15,8 +15,8 @@ class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate {
     self.initialProps = [:]
 
     // CleverTap Initialization
-    CleverTap.autoIntegrate()  // Auto-integrate the CleverTap SDK (for standard integration)
-    CleverTap.setDebugLevel(3) // Set debug level for logs (can be set to 0 for no logs)
+    CleverTap.autoIntegrate()
+    CleverTap.setDebugLevel(3)
 
     // React Native initialization for CleverTap
     CleverTapReactManager.sharedInstance()?.applicationDidLaunch(options: launchOptions)
