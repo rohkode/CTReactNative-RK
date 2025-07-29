@@ -31,31 +31,28 @@ This repository demonstrates how to implement Unified Inbox in React Native usin
 
 ---
 
-## 🚀 What This Project Implements
+## 🧩 What This Project Implements
 
-* CleverTap SDK integration
-  * `User login`
-  * `Event trackingt`
-* App Inbox message retrieval using:
-  * `(https://sk1.api.clevertap.com/1/inbox/getMessages API via Axios)`
-* Storing messages client-side using state
-* Custom rendering using FlatList
-* Handling:
-  * `Inbox message viewed`
-  * `Inbox message clicked`
-  * `Inbox message as read`
-* Support of re-delivery of app-inbox messages across uninstall/reinstall by logging in with the same identity.
+* Fetch messages using CleverTap's Inbox APIs:
+  * `(getMessages)`
+* Track Viewed & Clicked events:
+  * `(markMessagesAsRead)`
+  * `(markMessagesAsClicked)`
+* Custom React Native UI using FlatList
+* Full control over UI (no native SDK inbox UI)
+* Works across uninstall/reinstall and device changes when same identity is used
 
 ---
 
-## 🧠 How Does the Message Persist After Reinstall?
+## 🧠 How Does Message Persistence Work?
 
-CleverTap stores App Inbox messages **on their servers**, tied to a user’s unique identity.
+CleverTap stores Unified Inbox messages **on the servers**, tied to a user’s unique identity.
 
 When the user logs in with the same `identity` again after reinstalling the app:
 
 * The SDK automatically re-associates the device with that identity.
-* The app makes a REST API call to CleverTap to fetch inbox messages for that identity.
+   * The app makes an API call to CleverTap (getMessages) to fetch inbox messages for that identity.
+   * Messages are fetched & displayed
 * No backend or server-to-server API integration is needed — this logic is purely SDK-driven.
 
 ---
@@ -80,32 +77,30 @@ npx react-native run-ios # or run-android
 Update your credentials in:
 
 * `App.tsx` → Initialization
-* `index.js` → CleverTap config if required
-
-Make sure your CleverTap dashboard is setup to send App Inbox messages to the relevant App ID.
+* `InboxScreen.js` → API headers
 
 ---
 
-### Step 3: Send App Inbox Message
+### Step 3: Send a Unified Inbox Message
 
-Use the CleverTap dashboard:
+On the CleverTap dashboard:
 
-1. Go to **Campaigns** → **+ Campaign** → **App Inbox**.
+1. Go to **Campaigns** → **+ Campaign** → **Unified Inbox**.
 2. Create a campaign for a test user (with a specific `identity`).
-3. Choose a category, title, content, etc.
-4. Send the campaign.
+3. Choose a title, message, etc.
+4. Launch the campaign.
 
 ---
 
 ### Step 4: Open Inbox in the App
 
-Login with the same `identity` in the app (hardcoded or UI-based). Then navigate to the App Inbox screen.
+Login with the same `identity` in the app. Then navigate to the Inbox screen.
 
 You’ll see:
 
 * Messages retrieved from the API
 * Custom UI rendering messages
-* Message title and content rendered in a FlatList
+* Message title and message rendered in a FlatList
 * Logs on view/click handlers
 
 ---
@@ -120,14 +115,6 @@ You’ll see:
 ---
 
 ## 📦 Code Highlights
-
-### Initialize App Inbox
-
-```tsx
-useEffect(() => {
-  CleverTap.initializeInbox();
-}, []);
-```
 
 ### Fetch Messages
 
