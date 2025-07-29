@@ -18,25 +18,35 @@ const InboxScreen = ({ route }) => {
   }, []);
 
   const fetchInboxMessages = async () => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/getMessages`,
-        { userId: userIdentity },
-        {
-          headers: {
-            'X-CleverTap-Account-Id': CT_ACCOUNT_ID,
-            'X-CleverTap-Passcode': CT_PASSCODE,
-            'Content-Type': 'application/json; charset=utf-8',
-          },
-        }
-      );
-      setMessages(response.data?.messages || []);
-    } catch (error) {
-      console.error('Error fetching inbox messages:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const response = await axios.post(
+      'https://sk1.api.clevertap.com/1/inbox/getMessages',
+      { userId: userIdentity },
+      {
+        headers: {
+          'X-CleverTap-Account-Id': CT_ACCOUNT_ID,
+          'X-CleverTap-Passcode': CT_PASSCODE,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const inboxMessages = response.data?.messages || [];
+    setMessages(inboxMessages);
+
+    // ✅ Track viewed events for all fetched messages
+    inboxMessages.forEach((msg) => {
+      if (msg._id) {
+        CleverTap.pushInboxNotificationViewedEventForId(msg._id);
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching inbox messages:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const markAsRead = async (message) => {
     try {
@@ -110,7 +120,7 @@ const InboxScreen = ({ route }) => {
       console.error('Error processing message click:', err);
     }
   };
-
+console.log('Message ID:', message.messageId, 'SDK ID (_id):', message._id);
   const renderItem = ({ item }) => {
     const content = item.msg?.content?.[0];
     return (
