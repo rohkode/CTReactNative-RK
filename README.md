@@ -1,16 +1,33 @@
-# 📨 CleverTap React Native - App Inbox API Integration (`app-inbox-api-version`)
+# 📨 CleverTap React Native – Unified Inbox API Integration
 
 ## 📖 Use Case
 
-Many apps today use an **App Inbox** to send persistent in-app messages to users — promotions, reminders, alerts, or updates that don’t disappear after being seen. But here’s a challenge:
+Many apps today use an App Inbox to send persistent in-app messages — promotions, reminders, alerts, or updates that don’t disappear after being seen. However, standard App Inbox has limitations:
 
-**What happens when a user uninstalls and reinstalls the app? Do the messages stay?**
+* ❌ Messages do NOT persist if the app is uninstalled
+* ❌ No cross-device message syncing
 
-This repository answers that question with a **YES** ✅ — using CleverTap's App Inbox APIs *directly* on the client side via the React Native SDK, we’ve implemented a version where:
+# 📨 Introducing Unified Inbox
 
-* Messages persist across uninstall and reinstall if the same `identity` is used to log in.
-* No server-side API calls are required to fetch the inbox messages.
-* Everything is handled within the React Native app using the official CleverTap SDK methods.
+With CleverTap’s Unified Inbox, the answer is **YES** ✅: — messages persist across sessions, devices, and even after app reinstall. Unlike the traditional App Inbox, Unified Inbox:
+
+* Stores messages on CleverTap servers
+* Associates messages with the user’s identity
+* Allows complete UI control via APIs
+
+This repository demonstrates how to implement Unified Inbox in React Native using:
+
+* ✅ CleverTap Unified Inbox & APIs
+* ✅ Custom React Native FlatList UI
+* ✅ Event tracking for Viewed and Clicked states
+
+---
+
+## 🔁 APIs Used
+
+* getMessages API: https://developer.clevertap.com/docs/getmessages-api
+* markMessagesAsRead API: https://developer.clevertap.com/docs/markmessagesasread-api
+* markMessagesAsClicked API: https://developer.clevertap.com/docs/markmessagesasclicked-api
 
 ---
 
