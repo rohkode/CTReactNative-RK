@@ -118,33 +118,33 @@ You’ll see:
 
 ### Fetch Messages
 
-```tsx
+```js
 const response = await axios.post(
   'https://sk1.api.clevertap.com/1/inbox/getMessages',
   { userId: userIdentity },
-  {
-    headers: {
-      'X-CleverTap-Account-Id': CT_ACCOUNT_ID,
-      'X-CleverTap-Passcode': CT_PASSCODE,
-      'Content-Type': 'application/json',
-    },
-  }
+  { headers: { 'X-CleverTap-Account-Id': CT_ACCOUNT_ID, 'X-CleverTap-Passcode': CT_PASSCODE } }
 );
 ```
 
 ### Handle Message Click / View
 
-```tsx
-CleverTap.markReadInboxMessageForId(messageId);
-CleverTap.pushInboxNotificationViewedEventForId(messageId);
-CleverTap.pushInboxNotificationClickedEventForId(messageId);
+```js
+await axios.post(`${BASE_URL}/markMessagesAsRead`, {
+  userId: userIdentity,
+  messages: [{ messageId: message.messageId, wzrk_id: message.wzrk_id }]
+});
+await axios.post(`${BASE_URL}/markMessagesAsClicked`, {
+  userId: userIdentity,
+  messages: [{ messageId: message.messageId, wzrk_id: message.wzrk_id }]
+});
 ```
 
 ---
 
 ## ❗ Notes
 
-* App Inbox *won’t* show messages for anonymous users (i.e., before login).
+* Kindly enable Unified Inbox feature in your CleverTap dashboard.
+* Unified Inbox messages won’t show for anonymous users (i.e., before login).
 * Make sure you call onUserLogin and use a valid identity before accessing the inbox.
-* This project does not use SDK methods like getAllInboxMessages, getInboxMessageCount, or getInboxMessageUnreadCount.
+* This project does not use SDK methods like getAllInboxMessages.
 * All inbox retrieval is done via API — giving you complete UI control.
