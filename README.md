@@ -1,5 +1,7 @@
 # 📨 CleverTap React Native – Unified Inbox API Integration
 
+🚨⚠️ **Note**: This project was an internal POC to explore implementation options and build knowledge. It is not intended to be shared with customers. Our current Unified Inbox APIs are not designed to handle the scale of multiple millions of user devices unless fully productized, and the cost implications at such scale would be prohibitively high.
+
 ## 📖 Use Case
 
 Many apps today use an App Inbox to send persistent in-app messages — promotions, reminders, alerts, or updates that don’t disappear after being seen. However, standard App Inbox has limitations:
