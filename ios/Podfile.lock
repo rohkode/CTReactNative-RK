@@ -24,6 +24,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - CTNotificationService (0.1.7)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
   - FBLazyVector (0.78.2)
@@ -1526,6 +1527,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNReactNativeSharedGroupPreferences (1.1.24):
+    - React
   - RNReanimated (3.18.0):
     - DoubleConversion
     - glog
@@ -1678,9 +1681,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - SDWebImage (5.21.1):
-    - SDWebImage/Core (= 5.21.1)
-  - SDWebImage/Core (5.21.1)
+  - SDWebImage (5.21.7):
+    - SDWebImage/Core (= 5.21.7)
+  - SDWebImage/Core (5.21.7)
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
 
@@ -1688,6 +1691,7 @@ DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - CleverTap-iOS-SDK
   - clevertap-react-native (from `../node_modules/clevertap-react-native`)
+  - CTNotificationService
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -1754,6 +1758,7 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNReactNativeSharedGroupPreferences (from `../node_modules/react-native-shared-group-preferences`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -1762,6 +1767,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - CleverTap-iOS-SDK
+    - CTNotificationService
     - SDWebImage
     - SocketRocket
 
@@ -1898,6 +1904,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNReactNativeSharedGroupPreferences:
+    :path: "../node_modules/react-native-shared-group-preferences"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1911,6 +1919,7 @@ SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   CleverTap-iOS-SDK: 05c1860785c898f4f2316df6a207eb0ebd9d890a
   clevertap-react-native: d07613ecfae193d01d29d844260194661cf68d58
+  CTNotificationService: 3eceea27cf0e28a2e14267bb706013363eb620c6
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: e32d34492c519a2194ec9d7f5e7a79d11b73f91c
@@ -1975,13 +1984,14 @@ SPEC CHECKSUMS:
   ReactCodegen: 44d63ad0712716eabb875c23ff1a78a8a26aeba8
   ReactCommon: 3b613db7d4a82c37e0ff73868094d1bea9c98755
   RNGestureHandler: cd8535b36a07c35f4bf735dc477474efff54a073
+  RNReactNativeSharedGroupPreferences: d4869af3c7757405b6b5ac633d0ef5f9886a9be7
   RNReanimated: e398c31832d2e9f29c0bd7e5536109a396b2984e
   RNScreens: e7518df482c799a7337ed4650f05a578d70bee42
   RNVectorIcons: ad4f78a46d6607cc26b6ed1b47c697cc4da84e83
-  SDWebImage: f29024626962457f3470184232766516dee8dfea
+  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 6eb60fc2c0eef63e7d2ef4a56e0a3353534143a2
 
-PODFILE CHECKSUM: 88afa0a275fd1acdba33fe6d0a3689a2d4f85c17
+PODFILE CHECKSUM: ac09db651ed9f67541de6b128318d9092565e5c3
 
 COCOAPODS: 1.16.2

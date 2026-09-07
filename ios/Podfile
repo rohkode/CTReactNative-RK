@@ -1,37 +1,43 @@
-# Resolve react_native_pods.rb with node to allow for hoisting
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
-    {paths: [process.argv[1]]}
-  )', __dir__]).strip
+require Pod::Executable.execute_command(
+  'node',
+  [
+    '-p',
+    'require.resolve(
+      "react-native/scripts/react_native_pods.rb",
+      { paths: [process.argv[1]] }
+    )',
+    __dir__
+  ]
+).strip
 
 platform :ios, min_ios_version_supported
+
 prepare_react_native_project!
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-end
-
-# ❌ Disable the New Architecture
 ENV['RCT_NEW_ARCH_ENABLED'] = '0'
 
+linkage = ENV['USE_FRAMEWORKS']
+
+if linkage != nil
+  Pod::UI.puts "Configuring Pods with #{linkage}ally linked Frameworks".green
+end
+
 target 'CTReactNative' do
+
   config = use_native_modules!
 
-  # ✅ Use static linkage for CocoaPods
   use_frameworks! :linkage => :static
 
-  # ✅ Disable Fabric and Hermes (safe setup)
   use_react_native!(
     :path => config[:reactNativePath],
     :fabric_enabled => false,
-    :hermes_enabled => false, # Set true only if using Hermes
+    :hermes_enabled => false,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # ✅ Add CleverTap Pods
-  pod 'clevertap-react-native', :path => '../node_modules/clevertap-react-native'
+  pod 'clevertap-react-native',
+      :path => '../node_modules/clevertap-react-native'
+
   pod 'CleverTap-iOS-SDK'
 
   post_install do |installer|
@@ -40,5 +46,29 @@ target 'CTReactNative' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+    
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+          config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+        end
+
+        if target.name == 'fmt'
+              target.build_configurations.each do |build_config|
+                build_config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+                build_config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
+                build_config.build_settings.delete('OTHER_CPLUSPLUSFLAGS')
+        end
+
+      end
+
+    end
+
   end
+
+end
+
+target 'NotificationServiceExtension' do
+  use_frameworks! :linkage => :static
+  pod 'CleverTap-iOS-SDK', :modular_headers => true
+  pod 'CTNotificationService', :modular_headers => true
 end

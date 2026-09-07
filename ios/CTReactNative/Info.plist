@@ -18,20 +18,6 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>CLEVERTAP_REGION</key>
-	<string>sk1</string>
-	<key>CleverTapAccountID</key>
-	<string>W84-RZR-RZ7Z</string>
-	<key>CleverTapToken</key>
-	<string>212-4b0</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>processing</string>
-		<string>remote-notification</string>
-	</array>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -41,12 +27,22 @@
 			<array>
 				<string>clevertap</string>
 			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 		</dict>
 	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is required for notifications and geofencing.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your location is required for notifications and geofencing.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>NSUserActivityTypeBrowsingWeb</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CLEVERTAP_REGION</key>
+	<string>eu1</string>
+	<key>CleverTapAccountID</key>
+	<string>886-85W-7Z7Z</string>
+	<key>CleverTapToken</key>
+	<string>05b-6bb</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -54,6 +50,16 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your location is required for notifications and geofencing.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is required for notifications and geofencing.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

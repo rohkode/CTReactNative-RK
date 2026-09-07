@@ -7,7 +7,7 @@ import CleverTapReact
 import UserNotifications
 
 @main
-class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate, CleverTapURLDelegate {
 
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
     self.moduleName = "CTReactNative"
@@ -17,6 +17,7 @@ class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate {
     // CleverTap Initialization
     CleverTap.autoIntegrate()
     CleverTap.setDebugLevel(3)
+    CleverTap.sharedInstance()?.setUrlDelegate(self)
 
     // React Native initialization for CleverTap
     CleverTapReactManager.sharedInstance()?.applicationDidLaunch(options: launchOptions)
@@ -69,7 +70,7 @@ class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate {
   override func sourceURL(for bridge: RCTBridge) -> URL? {
     return self.bundleURL()
   }
-
+  
   override func bundleURL() -> URL? {
     #if DEBUG
       return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
@@ -77,4 +78,17 @@ class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate {
       return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
     #endif
   }
-}
+  
+  // MARK: - CleverTap Deep Link Handling
+    func shouldHandleCleverTap(_ url: URL?, for channel: CleverTapChannel) -> Bool {
+        guard let deepLink = url else { return false }
+        print("CleverTap deep link opened: \(deepLink.absoluteString) via channel: \(channel)")
+
+        // Forward deep link into React Native
+        DispatchQueue.main.async {
+            RCTLinkingManager.application(UIApplication.shared, open: deepLink, options: [:])
+        }
+
+        return true
+    }
+  }

@@ -53,9 +53,7 @@ android {
 dependencies {
     // React Native core
     implementation("com.facebook.react:react-android")
-
-    // (No Hermes/JSC manual logic needed anymore here.)
-
+    
     // CleverTap SDK
     implementation 'com.clevertap.android:clevertap-android-sdk:7.1.0'
 

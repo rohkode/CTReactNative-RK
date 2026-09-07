@@ -1,0 +1,5 @@
+Command line invocation:
+    /Users/rohit.khandka/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -workspace CTReactNative.xcworkspace -scheme CTReactNative -destination generic/platform=iOS clean build
+
+2026-09-03 16:43:24.226 xcodebuild[78436:723477] Writing error result bundle to /var/folders/85/k45v6j553qvfb6fzhwz4zyxh0000gp/T/ResultBundle_2026-03-09_16-43-0024.xcresult
+xcodebuild: error: 'CTReactNative.xcworkspace' does not exist.
